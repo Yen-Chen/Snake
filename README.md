@@ -225,7 +225,7 @@ for i in 1..<snakePoint.count{
 
 ## 滑出的一個結束遊戲與重新遊戲的視窗
 首先需要在Main.storyBoard裡面的MainVC拉一個View進去上面那排狀態列，就會跑出一個小View在ViewController上面，如下圖  
-![image] (https://github.com/Yen-Chen/Snake/blob/master/photo.png)
+![image](https://github.com/Yen-Chen/Snake/blob/master/photo.png)
 
 再來記得把view和裡面的按鈕拉OutLet進來，以供UI設計使用，之後記得把這個滑出的動畫的程式碼放在ViewWillAppear裡面，才不會跑不出畫面來
 ```
