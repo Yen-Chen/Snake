@@ -222,3 +222,60 @@ for i in 1..<snakePoint.count{
     }
 }
  ```
+
+## 滑出的一個結束遊戲與重新遊戲的視窗
+首先需要在Main.storyBoard裡面的MainVC拉一個View進去上面那排狀態列，就會跑出一個小View在ViewController上面，如下圖
+![image] (https://github.com/Yen-Chen/Snake/blob/master/photo.png)
+
+再來記得把view和裡面的按鈕拉OutLet進來，以供UI設計使用，之後記得把這個滑出的動畫的程式碼放在ViewWillAppear裡面，才不會跑不出畫面來
+```
+override func viewWillAppear(_ animated: Bool) {
+    let height = appearView.frame.height
+    mainView.addSubview(appearView)
+    appearView.translatesAutoresizingMaskIntoConstraints = false
+    //以下三行為設定view的約束
+    appearView.heightAnchor.constraint(equalToConstant: height).isActive = true
+    appearView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 10).isActive = true
+    appearView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -10).isActive = true
+    //把底部的約束當作一個id來用，用來當作判斷是否有呼叫到此id，有的話就讓底部的約束改變這時就會進入ViewSlideUp的方法裡
+    let hide = appearView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: height)
+    hide.identifier = "hide"
+    hide.isActive = true
+    resetBtn.layer.cornerRadius = 10
+    endBtn.layer.cornerRadius = 10
+    appearView.backgroundColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0)
+    super.viewWillAppear(animated)
+}
+```
+
+當頭碰到身體死掉的時候就會呼叫下面func，當找到id為hide的時候就讓約束改變，並讓view跑上來主要的mainView上，再限制view跑1.25秒才會到指定位置上
+```
+func viewSlideUp(){
+    for i in mainView.constraints{
+        if i.identifier == "hide"{
+            let showHeight = (mainView.frame.height - appearView.frame.height)/2
+            i.constant = -showHeight
+            break
+        }
+    }
+    UIView.animate(withDuration: 1.25) {
+        self.mainView.layoutIfNeeded()
+    }
+}
+```
+
+最後就是當按下重新遊戲的時候，再讓view回到原始的位置上
+```
+func tapViewBtn(){
+    for i in mainView.constraints{
+        if i.identifier == "hide"{
+            let showHeight = (mainView.frame.height - appearView.frame.height)/2
+            i.constant = showHeight
+            break
+        }
+    }
+    UIView.animate(withDuration: 1.0) {
+        self.mainView.layoutIfNeeded()
+    }
+}
+```
