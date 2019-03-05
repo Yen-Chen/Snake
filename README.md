@@ -6,7 +6,7 @@
 
 ## 貪食蛇頭、身體和吃蘋果的運作
 如何蛇的頭可以一步一步往前跑，首先我們先創出蛇頭，並讓它賦予可以隨著手勢滑動而更改方向  
-```
+```swift
 //蛇的頭
 func circleView(height:CGFloat,width:CGFloat){
     snakePoint.append(UIView())
@@ -40,7 +40,7 @@ func circleView(height:CGFloat,width:CGFloat){
 ```
 
 再來加上滑動的方法，必須加上判斷以防同時往一個方向滑兩次以上，會造成頭一次跳兩格以上  
-```
+```swift
 //滑動func
 @objc func swipeAction(recognizer:UISwipeGestureRecognizer){
     let directions = recognizer.direction
@@ -66,7 +66,7 @@ func circleView(height:CGFloat,width:CGFloat){
 `timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true, block: { (action) in self.bodyRun(height: height, width: width)})`  
 
 再來進入func裡面，func裡面帶了兩個傳入值，主要是用來計算下個點要往哪裡跑  
-```
+```swift
 //身體跟頭方向動
 func bodyRun(height:CGFloat,width:CGFloat){
     if self.snakePoint[0].center != self.randomView.center{  //當沒有吃到蘋果的時候就會執行這裡面的func
@@ -93,7 +93,7 @@ func bodyRun(height:CGFloat,width:CGFloat){
 
 裡面有幾個func的作用在下面說明  
 - 讓身體可以跟著頭跑
-```
+```swift
 //身體動作
 func runViewArrary(){
     var tempPoint:[CGPoint] = []
@@ -106,7 +106,7 @@ func runViewArrary(){
 }
 ```
 - 再來我們利用方向去算出下個點要往哪裡跑
-```
+```swift
 //頭方向
 func headDirection(height:CGFloat,width:CGFloat){
     let point = self.snakePoint[0].center
@@ -174,7 +174,7 @@ func headDirection(height:CGFloat,width:CGFloat){
 }
 ```
 - 產生出下一顆蘋果，並讓蘋果中心的座標隨機產生，並讓它的顏色也是隨機產生的
-```
+```swift
 //蘋果
 func randomView(height:CGFloat,width:CGFloat){
     let x = arc4random_uniform(UInt32((width/5)-1))
@@ -202,7 +202,7 @@ func randomColor(){
  
  ## 當頭碰到身體後的動畫運作
  剛剛有在頭的方向的func裡有提到，就是當頭往下個點移動的時候就會進行一次判斷，看看頭有沒有撞到身體，有的話就執行以下程式碼
- ```
+ ```swift
  //把蛇陣列裡面的每個點都賦予引力和碰撞，再加上重力加速度，所有的物體自然會往下掉
 for i in 1..<snakePoint.count{
     if self.snakePoint[0].center == tempPoint[i]{
@@ -228,7 +228,7 @@ for i in 1..<snakePoint.count{
 ![image](https://github.com/Yen-Chen/Snake/blob/master/photo.png)
 
 再來記得把view和裡面的按鈕拉OutLet進來，以供UI設計使用，之後記得把這個滑出的動畫的程式碼放在ViewWillAppear裡面，才不會跑不出畫面來
-```
+```swift
 override func viewWillAppear(_ animated: Bool) {
     let height = appearView.frame.height
     mainView.addSubview(appearView)
@@ -249,7 +249,7 @@ override func viewWillAppear(_ animated: Bool) {
 ```
 
 當頭碰到身體死掉的時候就會呼叫下面func，當找到id為hide的時候就讓約束改變，並讓view跑上來主要的mainView上，再限制view跑1.25秒才會到指定位置上
-```
+```swift
 func viewSlideUp(){
     for i in mainView.constraints{
         if i.identifier == "hide"{
@@ -265,7 +265,7 @@ func viewSlideUp(){
 ```
 
 最後就是當按下重新遊戲的時候，再讓view回到原始的位置上
-```
+```swift
 func tapViewBtn(){
     for i in mainView.constraints{
         if i.identifier == "hide"{
